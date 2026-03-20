@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Qué equipo de fútbol eres?</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  :root {
+    --green: #1a6b2a;
+    --green-light: #2d9e42;
+    --green-dark: #0d3d17;
+    --gold: #f5c518;
+    --gold-dark: #c9a20a;
+    --white: #f9f9f9;
+    --gray: #e8e8e8;
+    --text: #1a1a1a;
+    --text-muted: #555;
+    --card-bg: #ffffff;
+    --shadow: 0 4px 24px rgba(0,0,0,0.13);
+  }
+ 
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--green-dark);
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.05) 39px, rgba(255,255,255,0.05) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.05) 39px, rgba(255,255,255,0.05) 40px);
+    min-height: 100vh;
+    color: var(--text);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+ 
+  .container {
+    width: 100%;
+    max-width: 680px;
+  }
+ 
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+ 
+  .ball-icon {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    animation: bounce 1.2s infinite alternate;
+  }
+ 
+  @keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+  }
+ 
+  h1 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    line-height: 1.1;
+  }
+ 
+  h1 span {
+    color: #fff;
+    display: block;
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+ 
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.15);
+    border-radius: 99px;
+    height: 8px;
+    margin: 1.2rem 0;
+    overflow: hidden;
+  }
+ 
+  .progress-bar {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+ 
+  .progress-label {
+    color: rgba(255,255,255,0.75);
+    font-size: 0.85rem;
+    text-align: right;
+    margin-bottom: 1.2rem;
+  }
+ 
+  .card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    padding: 2rem 1.8rem;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.35s ease;
+  }
+ 
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+ 
+  .question-number {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+ 
+  .question-text {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+  }
+ 
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+ 
+  .option-btn {
+    background: var(--gray);
+    border: 2.5px solid transparent;
+    border-radius: 14px;
+    padding: 1rem 0.8rem;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    transition: all 0.18s;
+    text-align: center;
+    line-height: 1.2;
+  }
+ 
+  .option-btn:hover {
+    background: #d4eadb;
+    border-color: var(--green-light);
+    color: var(--green-dark);
+  }
+ 
+  .option-btn.selected {
+    background: var(--green);
+    border-color: var(--green-dark);
+    color: #fff;
+    transform: scale(1.03);
+  }
+ 
+  .option-letter {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    opacity: 0.65;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+ 
+  .nav-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+  }
+ 
+  .btn {
+    flex: 1;
+    padding: 0.9rem 1.2rem;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s;
+  }
+ 
+  .btn-back {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    max-width: 120px;
+  }
+ 
+  .btn-back:hover { background: rgba(255,255,255,0.25); }
+ 
+  .btn-next {
+    background: var(--gold);
+    color: var(--green-dark);
+    font-size: 1.05rem;
+  }
+ 
+  .btn-next:hover { background: var(--gold-dark); color: #fff; }
+  .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
+ 
+  .result-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    animation: fadeUp 0.4s ease;
+  }
+ 
+  .result-emoji {
+    font-size: 5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+ 
+  .result-score {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+  }
+ 
+  .result-team {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(2.5rem, 8vw, 3.8rem);
+    color: var(--green);
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 0.6rem;
+  }
+ 
+  .result-desc {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 420px;
+    margin: 0 auto 1.5rem;
+  }
+ 
+  .result-range {
+    display: inline-block;
+    background: var(--green);
+    color: #fff;
+    border-radius: 99px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 1.2rem;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+  }
+ 
+  .btn-retry {
+    background: var(--gold);
+    color: var(--green-dark);
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    padding: 0.9rem 2rem;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+ 
+  .btn-retry:hover { background: var(--gold-dark); color: #fff; }
+ 
+  .intro-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    padding: 2.2rem 1.8rem;
+    text-align: center;
+    animation: fadeUp 0.4s ease;
+  }
+ 
+  .intro-card p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+ 
+  .btn-start {
+    background: var(--green);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 2.5rem;
+    cursor: pointer;
+    transition: all 0.18s;
+    width: 100%;
+  }
+ 
+  .btn-start:hover { background: var(--green-light); }
+ 
+  @media (max-width: 480px) {
+    .options { grid-template-columns: 1fr; }
+    .card { padding: 1.5rem 1.2rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="ball-icon">⚽</span>
+    <h1>
+      <span>DESCUBRE</span>
+      ¿Qué equipo de fútbol eres?
+    </h1>
+  </header>
+ 
+  <div id="app"></div>
+</div>
+ 
+<script>
+const questions = [
+  {
+    text: "¿Cuál es tu helado favorito?",
+    options: [
+      { label: "Chocolate", points: 3 },
+      { label: "Vainilla", points: 2 },
+      { label: "Fresa", points: 4 },
+      { label: "Limón", points: 1 }
+    ]
+  },
+  {
+    text: "¿Qué emoción te describe mejor?",
+    options: [
+      { label: "Felicidad", points: 4 },
+      { label: "Enojo", points: 2 },
+      { label: "Tristeza", points: 1 },
+      { label: "Otro", points: 3 }
+    ]
+  },
+  {
+    text: "¿Qué hobby te describe mejor?",
+    options: [
+      { label: "Deportes / Ejercicio", points: 4 },
+      { label: "Música", points: 3 },
+      { label: "Pintura", points: 2 },
+      { label: "Baile", points: 1 }
+    ]
+  },
+  {
+    text: "¿Qué género de películas prefieres?",
+    options: [
+      { label: "Terror", points: 4 },
+      { label: "Acción", points: 1 },
+      { label: "Comedia", points: 3 },
+      { label: "Drama", points: 2 }
+    ]
+  },
+  {
+    text: "¿Qué canción prefieres?",
+    options: [
+      { label: "Patito Feo", points: 4 },
+      { label: "La Vaca Lola", points: 3 },
+      { label: "Pino Pong", points: 1 },
+      { label: "La Abuelita", points: 3 }
+    ]
+  },
+  {
+    text: "¿Qué país preferirías visitar?",
+    options: [
+      { label: "México", points: 4 },
+      { label: "España", points: 3 },
+      { label: "Alemania", points: 1 },
+      { label: "Inglaterra", points: 2 }
+    ]
+  },
+  {
+    text: "¿Qué superhéroe prefieres?",
+    options: [
+      { label: "Spiderman", points: 2 },
+      { label: "Hulk", points: 1 },
+      { label: "Superman", points: 3 },
+      { label: "Batman", points: 4 }
+    ]
+  },
+  {
+    text: "¿Qué dulce prefieres?",
+    options: [
+      { label: "Dulce", points: 2 },
+      { label: "Ácido", points: 3 },
+      { label: "Picante", points: 4 },
+      { label: "Otro", points: 1 }
+    ]
+  },
+  {
+    text: "¿Qué animal prefieres?",
+    options: [
+      { label: "Conejo", points: 4 },
+      { label: "Burro", points: 2 },
+      { label: "Águila", points: 1 },
+      { label: "León", points: 3 }
+    ]
+  },
+  {
+    text: "¿Qué color prefieres?",
+    options: [
+      { label: "Azul", points: 3 },
+      { label: "Blanco", points: 4 },
+      { label: "Amarillo", points: 1 },
+      { label: "Rojo", points: 2 }
+    ]
+  }
+];
+ 
+const results = [
+  { range: [0, 5], team: "Bayern Múnich", emoji: "🔴", desc: "Eres disciplinado, serio y siempre vas al máximo. Un ganador nato con carácter de acero." },
+  { range: [6, 15], team: "Club América", emoji: "🦅", desc: "Tienes carisma, pasión y mucha actitud. Te gusta ser el centro de atención y nunca te rindes." },
+  { range: [16, 24], team: "Barcelona", emoji: "🔵🔴", desc: "Creativo, elegante y con estilo propio. Juegas bonito y con clase, como los mejores." },
+  { range: [25, 34], team: "Cruz Azul", emoji: "💙", desc: "Eres fiel, constante y con mucha garra. La lealtad es tu mayor fortaleza." },
+  { range: [35, 40], team: "Real Madrid", emoji: "👑", desc: "Eres ambicioso, exitoso y siempre apuntas a lo más alto. La grandeza es tu destino." }
+];
+ 
+const letters = ['A', 'B', 'C', 'D'];
+ 
+let state = { screen: 'intro', current: 0, answers: [], score: 0 };
+ 
+function getResult(score) {
+  return results.find(r => score >= r.range[0] && score <= r.range[1]) || results[results.length - 1];
+}
+ 
+function render() {
+  const app = document.getElementById('app');
+  if (state.screen === 'intro') {
+    app.innerHTML = `
+      <div class="intro-card">
+        <h2 style="font-family:'Bebas Neue',cursive;font-size:1.8rem;color:var(--green);letter-spacing:2px;margin-bottom:0.8rem;">¿Estás listo?</h2>
+        <p>Responde 10 preguntas y descubre con qué equipo de fútbol tienes más compatibilidad. ¡Sin trampa ni cartón!</p>
+        <button class="btn-start" onclick="startQuiz()">¡Comenzar el test! ⚡</button>
+      </div>`;
+    return;
+  }
+ 
+  if (state.screen === 'result') {
+    const r = getResult(state.score);
+    app.innerHTML = `
+      <div class="result-card">
+        <span class="result-emoji">${r.emoji}</span>
+        <div class="result-score">Tu puntaje: <strong>${state.score}</strong> puntos</div>
+        <div class="result-team">${r.team}</div>
+        <span class="result-range">Rango ${r.range[0]} – ${r.range[1]} pts</span>
+        <p class="result-desc">${r.desc}</p>
+        <button class="btn-retry" onclick="restartQuiz()">🔄 Volver a jugar</button>
+      </div>`;
+    return;
+  }
+ 
+  const q = questions[state.current];
+  const selected = state.answers[state.current];
+  const pct = Math.round((state.current / questions.length) * 100);
+ 
+  app.innerHTML = `
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" style="width:${pct}%"></div>
+    </div>
+    <div class="progress-label">Pregunta ${state.current + 1} de ${questions.length}</div>
+    <div class="card">
+      <div class="question-number">Pregunta ${state.current + 1}</div>
+      <div class="question-text">${q.text}</div>
+      <div class="options">
+        ${q.options.map((opt, i) => `
+          <button class="option-btn ${selected === i ? 'selected' : ''}" onclick="selectOption(${i})">
+            <span class="option-letter">${letters[i]}</span>
+            ${opt.label}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+    <div class="nav-buttons">
+      ${state.current > 0 ? `<button class="btn btn-back" onclick="goBack()">← Atrás</button>` : '<div></div>'}
+      <button class="btn btn-next" onclick="goNext()" ${selected === undefined ? 'disabled' : ''}>
+        ${state.current === questions.length - 1 ? '¡Ver resultado! 🏆' : 'Siguiente →'}
+      </button>
+    </div>
+  `;
+}
+ 
+function startQuiz() {
+  state = { screen: 'quiz', current: 0, answers: [], score: 0 };
+  render();
+}
+ 
+function selectOption(i) {
+  state.answers[state.current] = i;
+  render();
+}
+ 
+function goNext() {
+  const sel = state.answers[state.current];
+  if (sel === undefined) return;
+  if (state.current === questions.length - 1) {
+    const total = questions.reduce((sum, q, qi) => {
+      const a = state.answers[qi];
+      return sum + (a !== undefined ? q.options[a].points : 0);
+    }, 0);
+    state.score = total;
+    state.screen = 'result';
+  } else {
+    state.current++;
+  }
+  render();
+}
+ 
+function goBack() {
+  if (state.current > 0) { state.current--; render(); }
+}
+ 
+function restartQuiz() {
+  state = { screen: 'intro', current: 0, answers: [], score: 0 };
+  render();
+}
+ 
+render();
+</script>
+</body>
+</html>
+ 
